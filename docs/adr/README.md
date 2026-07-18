@@ -20,6 +20,9 @@ consequences — so future contributors can understand *why* the system is the w
 | [0009](0009-agent-skills-skill-md-format.md) | Adopt the Agent Skills SKILL.md format for skills | Accepted |
 | [0010](0010-oidc-identity-and-role-based-authorization.md) | OIDC identity and role-based authorization | Accepted |
 | [0011](0011-terminal-first-ui-deferred.md) | Terminal-first development; UI layer deferred to Phase 5 | Accepted |
+| [0012](0012-tool-calling-model-provider.md) | Extend ModelProvider with tool calling capability | Accepted |
+| [0013](0013-embedded-vector-store-three-tier-memory.md) | Embedded vector store and three-tier memory model | Accepted |
+| [0014](0014-multi-transport-delivery.md) | Multi-transport delivery — email, messaging, and portal as KernelApi adapters | Accepted |
 
 ## Process
 
