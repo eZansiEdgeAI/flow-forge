@@ -251,6 +251,8 @@ accumulated knowledge before it generates a response.
 The current `MemoryService` uses a lexical (token-overlap) similarity score — sufficient for
 tests. Phase 3 (Milestone 3.3) replaces this with a real `VectorStore` adapter (e.g. Chroma)
 backed by embedding models, without changing the interface or any prompt logic.
+See [ADR-0013](adr/0013-embedded-vector-store-three-tier-memory.md) for the current decision:
+the `VectorStore` backend is LanceDB (embedded, no server), not Chroma.
 
 ### 4.5 Output parsing
 

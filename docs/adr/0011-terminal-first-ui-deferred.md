@@ -3,6 +3,7 @@
 **Date:** 2026-07-15
 **Status:** Accepted
 **Supersedes:** the Phase 2 "Vertical Slice UI" framing in `docs/PLAN.md`
+**Note:** References to "Chroma memory" in this ADR are superseded by [ADR-0013](0013-embedded-vector-store-three-tier-memory.md), which replaces Chroma with an embedded LanceDB adapter. The terminal-first principle and phase structure described here remain correct.
 
 ---
 

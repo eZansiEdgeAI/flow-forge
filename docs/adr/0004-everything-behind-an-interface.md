@@ -2,6 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-07-12
+- **Note:** The Chroma `VectorStore` backend mentioned below was superseded by [ADR-0013](0013-embedded-vector-store-three-tier-memory.md), which replaces Chroma with an embedded LanceDB adapter and extends the memory model to three tiers. The interface and conformance-suite approach described here remain correct.
 
 ## Context
 
