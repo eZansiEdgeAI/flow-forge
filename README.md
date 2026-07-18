@@ -27,16 +27,20 @@ packages/
   audit/               @flowforge/audit     — append-only, hash-chained audit log
   workflow/            @flowforge/workflow  — embedded workflow engine (pause/resume, retries, branching)
   identity/            @flowforge/identity  — OIDC identity, claim-to-role mapping, sessions (ADR-0010)
-  cli/                 @flowforge/cli       — flowforge validate | inspect | run
-  desktop/             @flowforge/desktop   — Electron + React desktop shell (Phase 2 vertical slice)
+  kernel/              @flowforge/kernel    — transport-agnostic KernelApi + reference implementation
+  cli/                 @flowforge/cli       — flowforge validate | inspect | run | runs | audit | memory
+  desktop/             @flowforge/desktop   — Electron + React desktop shell (buildable; parked until Phase 5)
 fixtures/
   Grade7-Maths.workforce/                   — reference workforce package
+skills/
+  meeting-minutes/                          — reusable, cross-project Agent Skill for turning discussions into minutes
 ```
 
 ## Getting started
 
 ```bash
 pnpm install
+pnpm lint
 pnpm build
 pnpm test
 
@@ -47,7 +51,13 @@ node packages/cli/dist/index.js inspect fixtures/Grade7-Maths.workforce
 # run the assignment workflow headlessly (mock model, interactive human steps)
 node packages/cli/dist/index.js run fixtures/Grade7-Maths.workforce assignment --mock
 
-# try the desktop shell (Phase 2, Milestone 2.1): load the reference package,
+# run a non-interactive workflow, inspect persisted runs, audit, and memory
+node packages/cli/dist/index.js run fixtures/Grade7-Maths.workforce assignment --mock --answers answers.json
+node packages/cli/dist/index.js runs list
+node packages/cli/dist/index.js audit verify
+node packages/cli/dist/index.js memory list teacher
+
+# try the desktop shell (Milestone 2.1, currently parked): load the reference package,
 # sign in as a role (dev identity), run the assignment workflow, inspect the audit trail
 pnpm --filter @flowforge/desktop dev
 ```
@@ -55,10 +65,12 @@ pnpm --filter @flowforge/desktop dev
 ## Design rules
 
 1. **Schemas first** — nothing consumes a format without a validating schema (`packages/core/schemas/`).
-2. **Everything behind an interface** — `ModelProvider`, `VectorStore`, `StateStore`, `AuditSink` are swappable (local/offline vs cloud).
-3. **No hardcoded agents** — all behaviour comes from packages; the platform installs empty.
+2. **Everything behind an interface** — `ModelProvider`, `EmbeddingProvider`, `VectorStore`, `StateStore`, `AuditSink` are swappable (local/offline vs cloud).
+3. **No hardcoded agents or tools** — all behaviour comes from packages; the platform installs empty.
 4. **Audit is runtime-enforced** — an agent step cannot run without emitting an audit record.
 5. **All human actions are authenticated and role-checked** — workflow input and approvals require an OIDC-verified `Principal` whose deployment-mapped roles match the node's declared role ([ADR-0010](docs/adr/0010-oidc-identity-and-role-based-authorization.md)).
+6. **Every kernel capability must be exercisable from the CLI before UI work** ([ADR-0011](docs/adr/0011-terminal-first-ui-deferred.md)).
+7. **Transport is an adapter concern** — email, messaging, portal, CLI, and desktop are all adapters over `KernelApi` ([ADR-0014](docs/adr/0014-multi-transport-delivery.md)).
 
 The reasoning behind these and other foundational decisions is captured as Architecture Decision
 Records in [docs/adr/](docs/adr/README.md).
@@ -68,14 +80,21 @@ Records in [docs/adr/](docs/adr/README.md).
 The detailed, task-level plan for the next phases — including "learn while you build" notes on the
 concepts behind each milestone — lives in [docs/PLAN.md](docs/PLAN.md).
 
+For a concise "why this project exists and how we think about it" introduction, see
+[docs/team-intro.md](docs/team-intro.md).
+
 For a detailed view of the current Phase 1/kernel branch — including what you can run today and what
 it proves before the UI phase — see [docs/phase-1-kernel-architecture.md](docs/phase-1-kernel-architecture.md).
 
 For the desktop shell pages architecture, planned Phase 5 screens, and a full explanation of how
 LLMs are integrated — see [docs/pages-architecture.md](docs/pages-architecture.md).
 
+For reusable, cross-project Agent Skills authored in the same format FlowForge uses internally, see
+[skills/README.md](skills/README.md).
+
 - **Phase 0 — Foundations** ✅ monorepo, six core schemas, CLI validator, reference package
 - **Phase 1 — Kernel** ✅ package loader, agent runtime, memory service, workflow engine, audit log, end-to-end headless test
-- **Phase 2 — Vertical slice UI** 🚧 in progress — Milestone 2.1 (Electron + React shell, typed IPC, dev-identity sign-in) ✅; next: package installation & workforce home, teacher & learner portals, audit viewer
-- **Phase 3 — Differentiators** — persona picker, Coach & Reflection agents, long-term memory in anger, visual workflow editor
+- **Phase 2 — Headless completeness & kernel API hardening** ✅ complete — `KernelApi`, file-backed persistence, full CLI, Electron shell parked until Phase 5
+- **Phase 3 — Real agents, tool calling & knowledge retrieval** 🚧 in progress — Ollama/OpenAI providers, tool calling, three-tier semantic memory, personas
 - **Phase 4 — Ecosystem** — package export/signing, second domain package, Dapr Workflows runner
+- **Phase 5 — UI** — desktop and portal experiences on top of the proven kernel contract
