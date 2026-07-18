@@ -70,7 +70,7 @@ The meeting minutes are ready. Suggest:
 1. A filename following this pattern:
       docs/meetings/YYYY-MM-DD-<topic-slug>.md
    where <topic-slug> is a 2–4 word kebab-case summary of the main topic
-   (e.g. "workforce-package-design", "phase-3-planning", "team-introduction").
+   (e.g. "api-design-review", "sprint-planning", "team-introduction").
    Use today's date.
 
 2. A one-line git commit message in the conventional commits style:
@@ -87,10 +87,9 @@ Output only the three items above, clearly labelled. Do not repeat the minutes.
 
 ## Example output (reference)
 
-The document `docs/team-intro.md` in this repository is a real example of what this
-skill produces: it began as an agent–human discussion about what FlowForge is and why
-it was built, and was then structured into a team introduction document capturing the
-conversation, decisions, and project context.
+A good example of what this skill produces is a **team introduction document**: a record of
+an agent–human discussion about a project that was then structured into a document capturing
+the conversation, key decisions, and project context — exactly what meeting minutes are for.
 
-That document was produced manually; this skill automates and standardises the process
-so any team can do the same after any significant conversation.
+The skill automates and standardises this process so any team can produce the same artefact
+after any significant conversation, regardless of project type or tech stack.
